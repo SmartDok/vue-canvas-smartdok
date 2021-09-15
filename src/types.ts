@@ -11,7 +11,6 @@ export enum CanvasMode {
   Draw = 'draw',
   Erase = 'erase',
   Move = 'move',
-  Scale = 'scale',
 }
 
 export interface ICanvasDimension {

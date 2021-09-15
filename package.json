@@ -1,8 +1,17 @@
 {
   "name": "vue-canvas-smartdok",
-  "version": "0.1.0",
-  "main": "src/entry.ts",
+  "version": "1.0.1-0",
+  "author": {
+    "name": "Tage Guddingsmo",
+    "email": "tage.guddingsmo@smartdok.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SmartDok/vue-canvas-smartdok.git"
+  },
+  "description": "'VueJS Component for drawing on 'object-based' canvas.",
   "private": false,
+  "main": "src/entry.ts",
   "scripts": {
     "serve": "vue-cli-service serve playground/main.ts",
     "build": "vue-cli-service build src/entry.ts",
@@ -20,15 +29,15 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
-    "vue": "^3.0.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "vue": "^3.0.0"
   },
-  
   "peerDependencies": {
     "vue": "^3.0.0"
-  }
+  },
+  "license": "MIT"
 }
