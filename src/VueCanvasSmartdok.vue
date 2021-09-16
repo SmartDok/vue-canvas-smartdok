@@ -308,11 +308,17 @@ export default defineComponent({
       return command;
     };
     
-    const drawText = (point: IPoint, text: string): void => {
+    const drawText = (point: IPoint, text: string, color: string): void => {
       if (props.mode === CanvasMode.Draw && props.shape === CanvasShape.Text) {
+        context.save();
+
+        context.fillStyle = color;
+
         const command = createDrawCommand(point, text);
   
         command.draw(point);
+
+        context.restore();
       }
     };
 
