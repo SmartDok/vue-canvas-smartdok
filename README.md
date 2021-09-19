@@ -47,7 +47,7 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 | font | String | 3rem Arial | The font size and type |
 | lineWidth | Number | 5 | The width of the stroke |
 | strokeStyle | String | #000000 | The color of the stroke |
-| fillStyle | String | transparent | The color of the fill. Note also sets the text color |
+| fillStyle | String | transparent | The color of the fill. Note: also sets the text color |
 | backgroundColor | String | transparent | The background color |
 | backgroundImage | String | '' | The background image |
 | stretchBackgroundImage | Boolean | false | Stretces the background image to fit the canvas |
@@ -59,8 +59,8 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 
 | Event | Data |  Description |
 | :-: | :-: |  :-: |
-| mousedown | Coordinate | Emits the coordinate where the mouse was clicked |  
-| target | Coordinate | Emits the coordinate where canvas shape was found on mouse click or drag |  
+| mousedown | MouseEvent, Coordinate | Emits the mouse event and the coordinate relative to the canvas where the mouse was clicked |  
+| target | Coordinate | If mouse click or drag is above an object on the canvas the coordinates realtive to the canvas is emitted |  
 
 # Methods
 
@@ -70,6 +70,6 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 | undo | - | void | - |
 | redo | - |void | - |
 | save | scale | String | url to the saved canvas |
-| drawText | (coordinate, text) | void | Adds text to the canvas. The coordinate is the top left coordinate where the text will be placed |
+| drawText | (coordinate, text) | void | Adds text to the canvas. The coordinate is the top left coordinate where the text will be placed. (Text is rendered with textBaseline 'top')|
 # License 
 [MIT](license.md)

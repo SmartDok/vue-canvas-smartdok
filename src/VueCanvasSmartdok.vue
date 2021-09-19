@@ -191,7 +191,10 @@ export default defineComponent({
 
       const point = getCoordinates(event);
 
-      emit('mousedown', point);
+      emit('mousedown', {
+        event,
+        point
+      });
       
       if (props.mode === CanvasMode.Erase) {
         handleErase(point);
