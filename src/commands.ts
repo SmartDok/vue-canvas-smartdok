@@ -346,8 +346,6 @@ class TextCommand extends CanvasCommand {
   public isTarget({ x, y }: IPoint) {
     if (this.erased) return false;
 
-    
-
     return x >= this.bounds.left && 
       x <= this.bounds.right &&
       y >= this.bounds.top &&
