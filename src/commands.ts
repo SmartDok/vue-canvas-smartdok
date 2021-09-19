@@ -62,6 +62,7 @@ abstract class CanvasCommand implements ICanvasCommand {
       fillStyle: context.fillStyle,
       lineWidth: context.lineWidth,
       font: context.font,
+      textBaseline: context.textBaseline,
     };
 
     this.path = new Path2D;
@@ -140,6 +141,7 @@ abstract class CanvasCommand implements ICanvasCommand {
     this.context.fillStyle = this.state.fillStyle;
     this.context.lineWidth = this.state.lineWidth;
     this.context.font = this.state.font;
+    this.context.textBaseline = this.state.textBaseline;
   }
 
  protected isPointInStroke(point: IPoint) {
@@ -328,6 +330,8 @@ class TextCommand extends CanvasCommand {
   constructor({ context, renderCanvasFn, point, text, devicePixelRatio }: ICanvasCommandArgs) {
     super(context, renderCanvasFn, devicePixelRatio);
 
+    this.state.textBaseline = 'top';
+
     this.from = point;
     
     this.text = text || '';
@@ -336,11 +340,13 @@ class TextCommand extends CanvasCommand {
   }
 
   public draw(point: IPoint) {
-    this.render();
+    this.redraw();
   }
 
   public isTarget({ x, y }: IPoint) {
     if (this.erased) return false;
+
+    
 
     return x >= this.bounds.left && 
       x <= this.bounds.right &&
@@ -372,8 +378,8 @@ class TextCommand extends CanvasCommand {
     return {
       left: this.from.x - this.metrics.actualBoundingBoxLeft,
       right: this.from.x + this.metrics.actualBoundingBoxRight,
-      top: this.from.y - this.metrics.actualBoundingBoxAscent,
-      bottom: this.from.y + this.metrics.actualBoundingBoxDescent,
+      top: this.from.y,
+      bottom: this.from.y + this.metrics.actualBoundingBoxAscent - this.metrics.actualBoundingBoxDescent,
     };
   }
 }

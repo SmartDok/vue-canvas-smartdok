@@ -55,6 +55,7 @@ export interface ICanvasState {
   fillStyle: string | CanvasGradient | CanvasPattern;
   lineWidth: number;
   font: string;
+  textBaseline: CanvasTextBaseline;
 }
 
 export interface IHistoryItem {
