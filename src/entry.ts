@@ -1,7 +1,7 @@
-import VueCanvasSmartdok from './VueCanvasSmartdok.vue';
+import VueDrawableCanvas from './VueDrawableCanvas.vue';
 import { CanvasShape, CanvasMode, IPoint } from './types';
 
-export default VueCanvasSmartdok;
+export default VueDrawableCanvas;
 
 export {
   CanvasShape,

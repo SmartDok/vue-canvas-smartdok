@@ -1,6 +1,6 @@
 {
-  "name": "vue-canvas-smartdok",
-  "version": "1.0.1-0",
+  "name": "vue-drawable-canvas",
+  "version": "1.0.0",
   "author": {
     "name": "Tage Guddingsmo",
     "email": "tage.guddingsmo@smartdok.com"
@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/SmartDok/vue-canvas-smartdok.git"
   },
-  "description": "'VueJS Component for drawing on 'object-based' canvas.",
+  "description": "VueJS Component - drawable 'object-based' canvas.",
   "private": false,
   "main": "src/entry.ts",
   "scripts": {

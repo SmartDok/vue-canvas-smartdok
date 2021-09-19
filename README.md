@@ -1,6 +1,6 @@
-# vue-canvas-smartdok 
+# vue-drawable-canvas 
 
-VueJS Component for drawing on canvas. Object based.
+VueJS Component - drawable 'object-based' canvas
 
 Vue3.
 
@@ -12,9 +12,9 @@ Vue3.
 
 To test - clone repo and run:
 
-``` yarn serve ```
+To use:
 
-``` Code sample to be added  ```
+``` To be added ```
 
 The component have these modes (CanvasMode) of usage:
 
