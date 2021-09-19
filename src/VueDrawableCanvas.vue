@@ -311,7 +311,7 @@ export default defineComponent({
       return command;
     };
     
-    const drawText = (point: IPoint, text: string, color: string): void => {
+    const drawText = (point: IPoint, text: string): void => {
       if (props.mode === CanvasMode.Draw && props.shape === CanvasShape.Text) {
         const command = createDrawCommand(point, text);
   
