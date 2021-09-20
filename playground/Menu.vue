@@ -1,38 +1,17 @@
 <template>
   <div class="menu">
     <div class="menu__color-pickers">
-      <div>
-        <label for="strokeStyle">strokeStyle</label>
+      <div
+        v-for="input in inputs"
+        :key="input.name"
+      >
+        <label :for="input.name">{{ input.name }}</label>
         <input
-          type="color"
-          @input="$emit('stroke-style', $event.target.value)"
-        >
-      </div>
-      <div>
-        <label for="fillStyle">fillStyle</label>
-        <input
-          name="fillStyle"
-          type="color"
-          @input="$emit('fill-style', $event.target.value)"
-        />
-      </div>
-      <div>
-        <label for="backgroundColor">backgroundColor</label>
-        <input
-          name="backgroundColor"
-          type="color"
-          @input="$emit('background-color', $event.target.value)"
-        >
-      </div>
-      <div>
-        <label for="lineWidth">lineWidth</label>
-        <input
-          type="range"
-          name="lineWidth"
-          min="2"
-          max="15"
-          value="2"
-          @input="$emit('line-width', Number($event.target.value))"
+          :type="input.type"
+          :min="input.min"
+          :max="input.max"
+          :value="input.value"
+          @input="onInputEvent(input, $event)"
         >
       </div>
     </div>
@@ -42,7 +21,7 @@
       :key="item.name"
       :class="{
         menu__item: true,
-        'menu__item--active': item.name === activeItem,
+        'menu__item--active': item.name === activeMenuItem,
       }"
       @click="item.onClick"
     >
@@ -52,67 +31,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
+
+interface MenuItem {
+  name: string,
+  onClick: () => void,
+}
 
 export default defineComponent({
   setup(props, { emit }) {
-    const activeItem = ref('Pencil');
+    const shapes = [
+      'pencil',
+      'circle',
+      'rectangle',
+      'triangle',
+      'text',
+    ];
 
-    const menuItems = [
-      {
-        name: 'Pencil',
-        onClick: () => {
-          activeItem.value = 'Pencil';
-          emit('mode', 'draw');
-          emit('shape', 'pencil');
-        },
-      },
-      {
-        name: 'Rectangle',
-        onClick: () => {
-          activeItem.value = 'Rectangle';
-          emit('mode', 'draw');
-          emit('shape', 'rectangle');
-        },
-      },
-      {
-        name: 'Triangle',
-        onClick: () => {
-          activeItem.value = 'Triangle';
-          emit('mode', 'draw');
-          emit('shape', 'triangle');
-        },
-      },
-      {
-        name: 'Circle',
-        onClick: () => {
-          activeItem.value = 'Circle';
-          emit('mode', 'draw');
-          emit('shape', 'circle');
-        },
-      },
-      {
-        name: 'Text',
-        onClick: () => {
-          activeItem.value = 'Text';
-          emit('mode', 'draw');
-          emit('shape', 'text');
-        },
-      },
-      {
-        name: 'Erase',
-        onClick: () => {
-          activeItem.value = 'Erase';
-          emit('mode', 'erase');
-        },
-      },
-      {
-        name: 'Move',
-        onClick: () => {
-          activeItem.value = 'Move';
-          emit('mode', 'move');
-        },
-      },
+    const modes = [
+      'erase',
+      'move',
+    ];
+
+    const actions = [
       {
         name: 'Undo',
         onClick: () => emit('undo'),
@@ -131,9 +72,85 @@ export default defineComponent({
       },
     ];
 
+    const activeMenuKey = ref<string>();
+
+    const setActiveMenuKey = (key: string) => {
+      activeMenuKey.value = key;
+    };
+
+    const menuItems: MenuItem[] = [];
+
+    [...shapes, ...modes].forEach(name => {
+      menuItems.push({
+        name,
+        onClick: () => setActiveMenuKey(name),
+      })
+    });
+  
+    actions.forEach(action => menuItems.push(action));
+      
+    const inputs = [
+      {
+        name: 'strokeStyle',
+        event: 'stroke-style',
+        type: 'color',
+        value: 'black',
+      },
+      {
+        name: 'fillStyle',
+        event: 'fill-style',
+        type: 'color',
+        value: 'black',
+      },
+      {
+        name: 'backgroundColor',
+        event: 'background-color',
+        type: 'color',
+        value: 'white',
+      },
+      {
+        name: 'lineWidth',
+        event: 'line-width',
+        type: 'range',
+        min: 2,
+        max: 20,
+        value: 5,
+        convert: (val: string) => Number(val),
+      }
+    ];
+
+    const onInputEvent = (item: any, event: any) => {
+      const input = inputs.find(it => it.name === item.name);
+
+      if (!input) {
+        throw new Error('Input not found');
+      }
+
+      const { value } = event.target;
+      
+      input.value = value;
+
+      if (item.convert) {
+        emit(item.event, item.convert(value));
+      } else {
+        emit(item.event, value);
+      }
+    }
+
+    watch(activeMenuKey, val => {
+      if (shapes.includes(val as string)) {
+        emit('mode', 'draw')
+        emit('shape', val)
+      } else {
+        emit('mode', val)
+      }
+    });
+
     return  {
+      inputs,
+      onInputEvent,
       menuItems,
-      activeItem,
+      activeMenuKey,
     };
   }
 });

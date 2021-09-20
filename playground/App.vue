@@ -1,28 +1,28 @@
 <template>
   <div class="app">
     <Menu
-      @shape="shape = $event"
-      @mode="mode = $event"
-      @stroke-style="strokeStyle = $event"
-      @line-width="lineWidth = $event"
-      @fill-style="fillStyle = $event"
-      @bg-color="backgroundColor = $event"
+      @shape="state.shape = $event"
+      @mode="state.mode = $event"
+      @stroke-style="state.strokeStyle = $event"
+      @line-width="state.lineWidth = $event"
+      @fill-style="state.fillStyle = $event"
+      @background-color="state.backgroundColor = $event"
       @undo="() => canvas.undo()"
       @redo="() => canvas.redo()"
       @clear="() => canvas.clear()"
       @save="onSave"
     />
     <div>
-      <VueCanvasSmartdok
+      <VueDrawableCanvas
         ref="canvas"
         class="canvas"
         background-image="http://placekitten.com/800/600"
-        :shape="shape"
-        :stroke-style="strokeStyle"
-        :fill-style="fillStyle"
-        :line-width="lineWidth"
-        :background-color="backgroundColor"
-        :mode="mode"
+        :shape="state.shape"
+        :stroke-style="state.strokeStyle"
+        :fill-style="state.fillStyle"
+        :line-width="state.lineWidth"
+        :background-color="state.backgroundColor"
+        :mode="state.mode"
         :height="height"
         :width="width"
         @mousedown="onMouseDown"
@@ -32,40 +32,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import VueCanvasSmartdok, {
-  IPoint,
-  CanvasShape,
-  CanvasMode,
-} from '../src/entry';
+import { defineComponent, ref, reactive } from 'vue';
+import VueDrawableCanvas from '../src/entry';
+import { IPoint } from '../src/types';
 import Menu from './Menu.vue';
 
 export default defineComponent({
   components: {
-    VueCanvasSmartdok,
+    VueDrawableCanvas,
     Menu,
   },
 
   setup() {
     const canvas = ref();
 
-    const shape = ref(CanvasShape.Pencil);
+    const width = ref(800);
+    
+    const height = ref(600);
 
-    const mode = ref(CanvasMode.Draw)
-
-    const strokeStyle = ref('black')
-
-    const fillStyle = ref('black')
-
-    const lineWidth = ref()
-
-    const backgroundColor = ref('white');
-
-    const savedImage = ref();
-
-    const width = ref();
-
-    const height = ref();
+    const state = reactive({
+      shape: undefined,
+      mode: undefined,
+      strokeStyle: undefined,
+      fillStyle: undefined,
+      lineWidth: undefined,
+      backgroundColor: undefined,
+    });
 
     const onSave = async () => {
       const url = await canvas.value.save();
@@ -74,21 +66,17 @@ export default defineComponent({
       console.log('saved', url);
     };
 
-    const onMouseDown = (point: IPoint) => canvas.value.drawText(point, 'Some text');
+    const onMouseDown = ({ event, point }: { event: MouseEvent, point: IPoint }) => {
+      canvas.value.drawText(point, 'Some text')
+    };
 
     return {
-      canvas,
-      shape,
-      mode,
+      state,
       width,
       height,
+      canvas,
       onSave,
-      fillStyle,
-      strokeStyle,
-      lineWidth,
-      savedImage,
       onMouseDown,
-      backgroundColor,
     };
   }
 });

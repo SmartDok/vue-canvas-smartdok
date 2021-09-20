@@ -55,7 +55,7 @@ const modeValidator = (value: CanvasMode) => [
   ].includes(value);
 
 export default defineComponent({
-  name: 'VueCanvasSmartdok',
+  name: 'VueDrawableCanvas',
   
   props: {
     width: {
