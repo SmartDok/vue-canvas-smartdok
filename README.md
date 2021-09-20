@@ -6,34 +6,56 @@ Vue3.
 
 # Install
 
-``` npm package info to be added ```
+``` yarn add vue-drawable-canvas ```
 
 # Usage
 
 To test - clone repo and run:
 
-To use:
+``` yarn serve ```
 
-``` To be added ```
+To use (See the playground folder for a working demo):
 
-The component have these modes (CanvasMode) of usage:
+``` 
+<!-- MyComponent.vue -->
 
-| Mode | String value |
-| :-: | :-: | 
-| Draw | draw |
-| Erase | erase |
-| Move | move |
+<template>
+  <VueDrawableCanvas
+    ref="canvas"
+  />
+</template>
 
-The component can draw these shapes (CanvasShape):
+<script>
+import VueDrawingCanvas from 'vue-drawing-canvas';
 
-| Shape | String value |
-| :-: | :-: | 
-| Pencil | pencil |
-| Circle | circle |
-| Rectangle | rectangle |
-| Triangle | triangle |
-| Text | text |
-| Background | background |
+export default {
+  name: 'MyComponent',
+  components: {
+    VueDrawingCanvas,
+  },
+};
+</script>
+
+```
+
+The component have these modes of usage:
+
+| String |
+| :-: | 
+| draw |
+| erase |
+| move |
+
+The component can draw these shapes:
+
+| String |
+| :-: | 
+| pencil |
+| circle |
+| rectangle |
+| triangle |
+| text |
+| background |
 
 The given mode and shape are set by props.
 
@@ -51,8 +73,8 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 | backgroundColor | String | transparent | The background color |
 | backgroundImage | String | '' | The background image |
 | stretchBackgroundImage | Boolean | false | Stretces the background image to fit the canvas |
-| shape | CanvasShape | CanvasShape.Pencil | The shape to be drawn |
-| mode | CanvasMode | CanvasShape.Draw | The canvas mode |
+| shape | string | string | The shape to be drawn |
+| mode | string | string | The canvas mode |
 | devicePixelRatio | Boolean | true | Adjust the canavs resolution based on the devicePixelRatio |
 
 # Emits
