@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import VueDrawableCanvas from '../dist/vue-drawable-canvas-test.esm';
+import VueDrawableCanvas from '../dist/vue-drawable-canvas.esm';
 import { IPoint } from '../src/types';
 import Menu from './Menu.vue';
 
