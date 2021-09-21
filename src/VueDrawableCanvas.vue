@@ -500,7 +500,7 @@ export default defineComponent({
       bg.redraw();
     };
 
-    const save = async (scale = 1): Promise<string> => {
+    const save = async (scale = 1): Promise<Blob> => {
       const scaledHeight = props.height * scale;
 
       const scaledWidth = props.width * scale;
