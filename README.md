@@ -91,7 +91,7 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 | clear | - | void | Clear the canvas and the undo/redo history |
 | undo | - | void | - |
 | redo | - |void | - |
-| save | scale | String | url to the saved canvas |
+| save | scale | Number | returns blob |
 | drawText | (coordinate, text) | void | Adds text to the canvas. The coordinate is the top left coordinate where the text will be placed. (Text is rendered with textBaseline 'top')|
 # License 
 [MIT](license.md)
