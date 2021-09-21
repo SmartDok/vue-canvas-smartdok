@@ -149,6 +149,7 @@ export default defineComponent({
         canvas: canvas.value,
         context,
         dimension: props,
+        devicePixelRatio: props.devicePixelRatio,
       });
 
       setContextState();
@@ -165,6 +166,7 @@ export default defineComponent({
         canvas: canvas.value,
         context,
         dimension: props,
+        devicePixelRatio: props.devicePixelRatio,
       });
 
       scaleBackgroundCommands();
@@ -415,25 +417,22 @@ export default defineComponent({
         canvas,
         context,
         dimension,
-        scaleContext = true,
+        devicePixelRatio,
       }: {
         canvas: HTMLCanvasElement,
-
         context: CanvasRenderingContext2D,
-        scaleContext?: boolean,
         dimension: ICanvasDimension,
+        devicePixelRatio: boolean,
       }) => {
       const { width, height } = dimension;
 
-      if (props.devicePixelRatio) {
+      if (devicePixelRatio) {
         const ratio = window.devicePixelRatio;
                 
         canvas.width = width * ratio;
         canvas.height = height * ratio;
 
-        if (scaleContext) {
-          context.scale(ratio, ratio);
-        }
+        context.scale(ratio, ratio);
 
       } else {
         canvas.width = width;
@@ -511,7 +510,7 @@ export default defineComponent({
       setCanvasDimension({
         canvas: saveCanvas.value,
         context: saveContext, 
-        scaleContext: false,
+        devicePixelRatio: false,
         dimension: {
           height: scaledHeight,
           width: scaledWidth,
@@ -532,7 +531,7 @@ export default defineComponent({
               image.height * scale,
             ];
 
-            saveContext.drawImage(image, 0, 0, ...boundry);
+            saveContext.drawImage(image, 0, 0, boundry[0], boundry[1]);
             resolve();
           };
   
@@ -543,15 +542,15 @@ export default defineComponent({
         await saveBgImage();
       }
 
-      saveContext.drawImage(canvas.value, 0, 0, scaledWidth, scaledHeight);
+      saveContext.drawImage(canvas.value, 0, 0, saveCanvas.value.width, saveCanvas.value.height);
 
-      const blob = await new Promise(
+      const blob = await new Promise<Blob>(
         resolve => saveCanvas.value.toBlob(resolve, 'image/png', 1.0),
       );
 
-      saveContext.clearRect(0, 0, scaledWidth, scaledHeight);
+      saveContext.clearRect(0, 0, saveCanvas.value.width, saveCanvas.value.height);
 
-      return URL.createObjectURL(blob);
+      return blob;
     };
 
     return {
