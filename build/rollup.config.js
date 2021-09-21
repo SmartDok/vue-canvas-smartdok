@@ -20,5 +20,5 @@ export default {
     }),
     commonjs(),
   ],
-  external: ['vue', 'lodash/cloneDeep'],
+   external: ['vue', 'lodash/cloneDeep'],
 };

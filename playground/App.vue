@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import VueDrawableCanvas from '../src/entry';
+import VueDrawableCanvas from '../dist/vue-drawable-canvas-test.esm';
 import { IPoint } from '../src/types';
 import Menu from './Menu.vue';
 
@@ -66,7 +66,7 @@ export default defineComponent({
       console.log('saved', url);
     };
 
-    const onMouseDown = ({ event, point }: { event: MouseEvent, point: IPoint }) => {
+    const onMouseDown = ({ point }: { event: MouseEvent, point: IPoint }) => {
       canvas.value.drawText(point, 'Some text')
     };
 
