@@ -6,7 +6,6 @@
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
-    @pointerleave="onPointerLeave"
   >
   </canvas>
   <canvas
@@ -232,9 +231,6 @@ export default defineComponent({
       activeCommand.onMouseUp(getCoordinates(event));
 
       activeCommand = undefined;
-    };
-
-    const onPointerLeave = (event: PointerEvent) => {
     };
 
     const handleDraw = (point: IPoint) => {
@@ -570,7 +566,6 @@ export default defineComponent({
       onPointerDown,
       onPointerMove,
       onPointerUp,
-      onPointerLeave,
       drawText,
       clear,
       undo,
