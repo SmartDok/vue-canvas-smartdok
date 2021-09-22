@@ -56,7 +56,7 @@ const modeValidator = (value: CanvasMode) => [
 
 export default defineComponent({
   name: 'VueDrawableCanvas',
-  
+
   props: {
     width: {
       type: Number,
@@ -86,7 +86,7 @@ export default defineComponent({
     fillStyle: {
       type: String,
       default: 'transparent',
-    }, 
+    },
 
     backgroundColor: {
       type: String,
@@ -103,7 +103,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-  
+
     shape: {
       type: String as PropType<CanvasShape>,
       default: CanvasShape.Pencil,
@@ -128,7 +128,7 @@ export default defineComponent({
   ],
 
   setup(props, { emit }) {
-    const canvas = ref();
+    const canvas = ref<HTMLCanvasElement>();
 
     const saveCanvas = ref();
 
@@ -142,11 +142,15 @@ export default defineComponent({
 
     let mouseDown = false;
 
+    const die = (): never => {
+      throw new Error('dead beef');
+    };
+
     onMounted(() => {
-      context = canvas.value.getContext('2d');
+      context = canvas.value?.getContext('2d') ?? die();
 
       setCanvasDimension({
-        canvas: canvas.value,
+        canvas: canvas.value ?? die(),
         context,
         dimension: props,
         devicePixelRatio: props.devicePixelRatio,
@@ -163,7 +167,7 @@ export default defineComponent({
       () => props.height,
     ], () => {
       setCanvasDimension({
-        canvas: canvas.value,
+        canvas: canvas.value ?? die(),
         context,
         dimension: props,
         devicePixelRatio: props.devicePixelRatio,
@@ -179,7 +183,7 @@ export default defineComponent({
       () => props.strokeStyle,
       () => props.fillStyle,
     ], () => setContextState());
-    
+
     watch(() => props.backgroundColor, (val, prevVal) => {
       if (val !== prevVal) {
         setBackgroundColor();
@@ -188,7 +192,7 @@ export default defineComponent({
 
     const onMouseDown = (event: MouseEvent) => {
       if (event.button !== 0) return;
-        
+
       mouseDown = true;
 
       const point = getCoordinates(event);
@@ -197,7 +201,7 @@ export default defineComponent({
         event,
         point
       });
-      
+
       if (props.mode === CanvasMode.Erase) {
         handleErase(point);
       }
@@ -238,7 +242,7 @@ export default defineComponent({
     const handleMove = (point: IPoint): void => {
       if (!activeCommand) {
         activeCommand = tryCreateMoveCommand(point);
-        
+
         return;
       }
 
@@ -257,7 +261,7 @@ export default defineComponent({
 
     const createDrawCommand = (point: IPoint, text?: string): ICanvasCommand => {
       const command = createCommand(props.shape, point, text);
-      
+
       history.push({ command });
 
       return command;
@@ -299,7 +303,7 @@ export default defineComponent({
         devicePixelRatio,
         renderCanvasFn: renderCanvas,
       };
-      
+
       return CanvasCommandFactory(shape, commandArgs);
     };
 
@@ -307,16 +311,16 @@ export default defineComponent({
       const command = getVisibleFgCommands().find(command => command.isTarget(point));
 
       if (!command) return;
-      
+
       emit('target', point);
 
       return command;
     };
-    
+
     const drawText = (point: IPoint, text: string): void => {
       if (props.mode === CanvasMode.Draw && props.shape === CanvasShape.Text) {
         const command = createDrawCommand(point, text);
-  
+
         command.draw(point);
       }
     };
@@ -330,13 +334,13 @@ export default defineComponent({
         if (command) {
           command.redraw();
         }
-        
+
         renderFg();
       }
     };
 
     const renderFg = () => getVisibleFgCommands().forEach(command => command.redraw());
-    
+
     const getVisibleBgCommand = () => history
       .map(({ command }) => command)
       .find(command => !command.isErased && command instanceof BackgroundCommand);
@@ -351,7 +355,7 @@ export default defineComponent({
       context.fillStyle = props.backgroundColor;
 
       const newBg = createCommand(CanvasShape.Background, {
-        x: 0, 
+        x: 0,
         y: 0,
       });
 
@@ -375,14 +379,14 @@ export default defineComponent({
             currentBg.erase();
           },
         };
-  
+
         currentBg.erase(true);
-      } 
+      }
 
       history.push(historyItem);
 
       newBg.draw({
-        x: props.width, 
+        x: props.width,
         y: props.height,
       });
     };
@@ -393,16 +397,16 @@ export default defineComponent({
       context.strokeStyle = props.strokeStyle;
 
       context.fillStyle = props.fillStyle;
-      
+
       context.lineWidth = props.lineWidth;
     };
 
     const getCoordinates = (event: MouseEvent): IPoint => {
-      const rect = canvas.value.getBoundingClientRect();
+      const rect = canvas.value?.getBoundingClientRect() ?? die();
 
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      
+
       return { x, y };
     };
 
@@ -412,7 +416,7 @@ export default defineComponent({
         x: props.width,
         y: props.height,
       }));
-    
+
     const setCanvasDimension = ({
         canvas,
         context,
@@ -428,7 +432,7 @@ export default defineComponent({
 
       if (devicePixelRatio) {
         const ratio = window.devicePixelRatio;
-                
+
         canvas.width = width * ratio;
         canvas.height = height * ratio;
 
@@ -448,7 +452,7 @@ export default defineComponent({
       return {
         width: `${props.width}px`,
         height: `${props.height}px`,
-        'background-image': `url(${props.backgroundImage})`,   
+        'background-image': `url(${props.backgroundImage})`,
         'background-repeat': 'no-repeat',
         ...stretchRule,
       };
@@ -476,9 +480,9 @@ export default defineComponent({
       if (!trash.length) return;
 
       const item = trash.pop() as IHistoryItem;
-      
+
       history.push(item);
-      
+
       const { command, redo: itemRedo } = item;
 
       if (itemRedo) {
@@ -494,7 +498,7 @@ export default defineComponent({
       history = history.slice(0, 1);
 
       trash = [];
-      
+
       const [{ command: bg }] = history;
 
       bg.redraw();
@@ -509,7 +513,7 @@ export default defineComponent({
 
       setCanvasDimension({
         canvas: saveCanvas.value,
-        context: saveContext, 
+        context: saveContext,
         devicePixelRatio: false,
         dimension: {
           height: scaledHeight,
@@ -521,7 +525,7 @@ export default defineComponent({
           const image = new Image();
 
           image.crossOrigin = 'anonymous';
-  
+
           image.onload = async () => {
             const boundry = props.stretchBackgroundImage ? [
               scaledWidth,
@@ -534,10 +538,10 @@ export default defineComponent({
             saveContext.drawImage(image, 0, 0, boundry[0], boundry[1]);
             resolve();
           };
-  
+
           image.src = props.backgroundImage;
       });
-  
+
       if (props.backgroundImage) {
         await saveBgImage();
       }
