@@ -3,10 +3,10 @@
     ref="canvas"
     v-bind="$attrs"
     :style="canvasStyle"
-    @mousedown="onMouseDown"
-    @mousemove="onMouseMove"
-    @mouseup="onMouseUp"
-    @mouseleave="onMouseUp"
+    @pointerdown="onPointerDown"
+    @pointermove="onPointerMove"
+    @pointerup="onPointerUp"
+    @pointerleave="onPointerLeave"
   >
   </canvas>
   <canvas
@@ -190,10 +190,12 @@ export default defineComponent({
       }
     });
 
-    const onMouseDown = (event: MouseEvent) => {
+    const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) return;
 
       mouseDown = true;
+
+      canvas.value?.setPointerCapture(event.pointerId);
 
       const point = getCoordinates(event);
 
@@ -207,7 +209,7 @@ export default defineComponent({
       }
     };
 
-    const onMouseMove = (event: MouseEvent) => {
+    const onPointerMove = (event: PointerEvent) => {
       if (!mouseDown) return;
 
       const point = getCoordinates(event);
@@ -221,14 +223,18 @@ export default defineComponent({
       }
     };
 
-    const onMouseUp = (event: MouseEvent) => {
+    const onPointerUp = (event: PointerEvent) => {
       mouseDown = false;
+      canvas.value?.releasePointerCapture(event.pointerId);
 
       if (!activeCommand) return;
 
       activeCommand.onMouseUp(getCoordinates(event));
 
       activeCommand = undefined;
+    };
+
+    const onPointerLeave = (event: PointerEvent) => {
     };
 
     const handleDraw = (point: IPoint) => {
@@ -561,9 +567,10 @@ export default defineComponent({
       canvas,
       saveCanvas,
       canvasStyle,
-      onMouseUp,
-      onMouseDown,
-      onMouseMove,
+      onPointerDown,
+      onPointerMove,
+      onPointerUp,
+      onPointerLeave,
       drawText,
       clear,
       undo,
