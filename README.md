@@ -26,12 +26,12 @@ To use (See the playground folder for a working demo):
 </template>
 
 <script>
-import VueDrawingCanvas from 'vue-drawing-canvas';
+import VueDrawableCanvas from 'vue-drawable-canvas';
 
 export default {
   name: 'MyComponent',
   components: {
-    VueDrawingCanvas,
+    VueDrawableCanvas,
   },
 };
 </script>
@@ -82,7 +82,7 @@ Canvas shapes are erased or moved by selecting the appropriate mode then clickin
 | Event | Data |  Description |
 | :-: | :-: |  :-: |
 | mousedown | MouseEvent, Coordinate | Emits the mouse event and the coordinate relative to the canvas where the mouse was clicked |  
-| target | Coordinate | If mouse click or drag is above an object on the canvas the coordinates realtive to the canvas is emitted |  
+| target | Coordinate | If mouse click or drag is above an object on the canvas the coordinates relative to the canvas is emitted |  
 
 # Methods
 

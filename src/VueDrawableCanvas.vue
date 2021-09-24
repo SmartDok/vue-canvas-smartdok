@@ -439,7 +439,6 @@ export default defineComponent({
         canvas.height = height * ratio;
 
         context.scale(ratio, ratio);
-
       } else {
         canvas.width = width;
         canvas.height = height;
