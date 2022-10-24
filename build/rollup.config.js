@@ -5,8 +5,8 @@ export default {
   input: 'src/entry.ts', 
   output: {
     globals: {
-      vue: 'vue',
-      'lodash/cloneDeep': 'cloneDeep',
+      vue: 'Vue',
+      'lodash': 'Lodash',
     },
 
     name: 'VueDrawableCanvas',
@@ -20,5 +20,5 @@ export default {
     }),
     commonjs(),
   ],
-   external: ['vue', 'lodash/cloneDeep'],
+   external: ['vue', 'lodash'],
 };

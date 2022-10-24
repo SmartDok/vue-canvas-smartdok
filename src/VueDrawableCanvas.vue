@@ -25,7 +25,7 @@ import {
   onMounted,
   computed,
 } from 'vue';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash';
 import {
   CanvasShape,
   CanvasMode,
